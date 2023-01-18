@@ -8,3 +8,4 @@ pandas == 1.4.2
 quantstats == 0.0.59
 matplotlib == 3.5.2
 streamlit == 1.17.0
+plotly == 5.8.2
