@@ -1,0 +1,10 @@
+gym == 0.21.0
+gym_anytrading
+stable_baselines3 == 1.6.2
+finta
+yfinance == 0.2.3
+numpy == 1.23.3
+pandas == 1.4.2
+quantstats == 0.0.59
+matplotlib = 3.5.2
+warnings
