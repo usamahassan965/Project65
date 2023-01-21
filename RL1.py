@@ -142,7 +142,7 @@ if Load_check:
         env_maker = lambda: env2
         env = DummyVecEnv([env_maker])
         model = A2C('MlpPolicy', env, verbose=1) 
-        model.learn(total_timesteps=100000)
+        model.learn(total_timesteps=50000)
         months = st.sidebar.slider('Months to predict...',min_value=1,max_value=12,value=2,step=1)
     with st.spinner('Please wait while the model is predicting...'):
         start_index = (train-20)
