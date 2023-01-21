@@ -115,8 +115,8 @@ def plot_raw_data2():
     st.pyplot(fig)
 
 if Load_check & (len(ticker)==0):
- st.text('Please select the ticker option!')
- else:
+    st.text('Please select the ticker option!')
+else:
     df = load_data(ticker,Start,End)
     df['SMA'] = TA.SMA(df, 12)
     df['RSI'] = TA.RSI(df)
