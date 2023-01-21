@@ -31,7 +31,7 @@ warnings.filterwarnings('ignore')
 
 st.title('Stock Trend Prediction')
 st.sidebar.header('User input Features')
-Load_check = st.sidebar.checkbox('Load data')
+
 
 # Scrapping Code
 # t = []
@@ -73,7 +73,7 @@ options = ['2YY=F','6J=F','6N=F','AA','AAL','AAPL','AFRM','ALLY','AMC','AMD','AM
 
 
 ticker = st.selectbox("Select from Options",options) 
-
+Load_check = st.sidebar.checkbox('Load data')
 c1,c2 = st.columns(2)
 with c1:
     Start = st.date_input('Enter Starting Date',datetime.date(2019,1,21))
