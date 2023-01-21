@@ -1,15 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # 0. Install and Import dependencies
-
-# In[1]:
-
-
-#!pip install tensorflow-gpu==1.15.0 tensorflow==1.15.0 stable-baselines gym-anytrading gym
-
-
-# In[1]:
+# # 1. Install and Import dependencies
 
 
 # Gym stuff
@@ -17,6 +9,7 @@ import gym
 import gym_anytrading
 import streamlit as st
 import datetime
+
 # Stable baselines - rl stuff
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.evaluation import evaluate_policy
@@ -40,6 +33,7 @@ st.title('Stock Trend Prediction')
 st.sidebar.header('User input Features')
 Load_check = st.sidebar.checkbox('Load data')
 
+# Scrapping Code
 # t = []
 # def scrape_stock_symbols(letter):
 #     letter = letter.upper()
@@ -53,12 +47,11 @@ Load_check = st.sidebar.checkbox('Load data')
 #         row = odd_rows[i].find_all('td')
 #         t.append(row[0].text.strip())
 #     return t
-
 # ticker = []
 # for l in string.ascii_lowercase:
-#     ticker.extend(scrape_stock_symbols(l))
-    
+#     ticker.extend(scrape_stock_symbols(l))    
 # options = set(ticker)
+
 options = ['2YY=F','6J=F','6N=F','AA','AAL','AAPL','AFRM','ALLY','AMC','AMD','AMZN','APE','ARKK','ASML','ATMC','ATMCR',
  'ATMCW','AUY','BA', 'BABA','BAC','BB','BBBY','BBIG','BFRG','BFRGW','BHP','BNGO','BOIL','BRK-B','BTC-USD','BTC=F',
  'BX','C','CALM','CHPT','CL=F','COIN','COST','CRWD','CVKD','CVNA','CVS','CWH','CYAD','D','DAL','DFS','DIA',
@@ -98,7 +91,6 @@ def add_signals(env):
     prices = env.df.loc[:, 'Low'].to_numpy()[start:end]
     signal_features = env.df.loc[:, ['Low', 'Volume','SMA', 'RSI', 'OBV']].to_numpy()[start:end]
     return prices, signal_features
-
 
 class MyCustomEnv(StocksEnv):
     _process_data = add_signals
@@ -187,29 +179,3 @@ if Load_check:
         No_Sell = env.history['position'].count(0)
         st.markdown(f'Our model has earned **{round(sum(avg_reward)/len(avg_reward),2)*100}** **percent reward** with the **predicted actions of Sell/Buy** and the average profit of **{round(sum(avg_profit)/len(avg_profit),2)*100}** percent.')
         st.markdown(f'Actions taken : **Buying -- {No_Buy}** ; **Selling -- {No_Sell}**')
-# # # 2. Build Environment
-
-# # # 2.1 Add Custom Indicators
-
-# # ## 2.1.3. Calculate SMA, RSI and OBV
-
-# # ## 2.1.4. Create New Environments
-
-
-
-    
-# # # 3. Build Environment and Train
-
-
-# # # 4. Evaluation
-
-
-   
-
-# profit_color = [{p<0: 'red', 0<=p<=1: 'orange'}[True] for p in df.monthly_returns().T['2019']]
-# plt.figure(figsize=(12,6))
-# plt.bar(x=df1.index,height=df1['2019'],color=profit_color)
-
-
-
-
