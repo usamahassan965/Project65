@@ -134,7 +134,7 @@ if Load_check:
     plot_raw_data()        
     st.header('High and Low Price')
     plot_raw_data2()
-    months_train = st.sidebar.slider('Months to train...',min_value=1,max_value=12,value=2,step=1)
+    months_train = st.sidebar.slider('Months to train...',min_value=2,max_value=12,value=2,step=1)
 
     with st.spinner('Please wait while the model is training  for prediction...'):
         train = 30*months_train
