@@ -193,7 +193,7 @@ try:
             No_Sell = env.history['position'].count(0)
             st.markdown(f'Our model has earned **{round(sum(avg_reward)/len(avg_reward),2)}** **percent reward** with the **predicted actions of Sell/Buy** and the average profit of **{round(sum(avg_profit)/len(avg_profit),2)}** percent.')
             st.markdown(f'Actions taken : **Buying -- {No_Buy}** ; **Selling -- {No_Sell}**')
-            st.markown(f' Maximum profit achieved While taking action once: **{max_profit}**')
+            st.markdown(f' Maximum profit achieved While taking action once: **{max_profit}**')
 except ValueError:
     st.error('Please select the ticker option!',icon='❌')
 
