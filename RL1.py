@@ -74,7 +74,7 @@ options = ['2YY=F','6J=F','6N=F','AA','AAL','AAPL','AFRM','ALLY','AMC','AMD','AM
  'ZARTWD=X','ZARUSD=X','ZF=F','ZIM','ZM','ZN=F','ZOM','ZS','ZT=F','^DJI','^GSPC','^IXIC','^RUT','^TNX','^VIX']
 
 
-ticker = st.selectbox("Select from Options",options) 
+ticker = st.selectbox("Select the Stock ticker",options) 
 
 c1,c2 = st.columns(2)
 with c1:
@@ -86,6 +86,16 @@ def load_data(ticker,Start,End):
     df = yf.download(ticker, Start,End)
     df.reset_index(inplace=True)
     return df
+
+
+# # # 2. Build Environment
+
+# # # 2.1 Add Custom Indicators
+
+# # ## 2.1.3. Calculate SMA, RSI and OBV
+
+# # ## 2.1.4. Create New Environments
+
 
 def add_signals(env):
     start = env.frame_bound[0] - env.window_size
@@ -129,7 +139,7 @@ try:
         plot_raw_data()        
         st.header('High and Low Price')
         plot_raw_data2()
-        months_train = st.sidebar.slider('Months to train...',min_value=1,max_value=12,value=2,step=1)
+        months_train = st.sidebar.slider('Months to train...',min_value=1,max_value=12,value=2,step=1)          # # # 3. Build Environment and Train
 
         with st.spinner('Please wait while the model is training  for prediction...'):
             train = 30*months_train
@@ -142,7 +152,7 @@ try:
         with st.spinner('Please wait while the model is predicting...'):
             start_index = (train-20)
             end_index = start_index + 30*months
-            env = MyCustomEnv(df=df, window_size=12, frame_bound=(start_index,end_index))
+            env = MyCustomEnv(df=df, window_size=12, frame_bound=(start_index,end_index))                             # # # 4. Evaluation
             obs = env.reset()
             while True: 
                 obs = obs[np.newaxis, ...]
@@ -178,34 +188,18 @@ try:
             st.subheader('Metrics')
             avg_reward = env.history['total_reward']
             avg_profit = env.history['total_profit']
+            max_profit = env.max_possible_profit()
             No_Buy = env.history['position'].count(1)
             No_Sell = env.history['position'].count(0)
-            st.markdown(f'Our model has earned **{round(sum(avg_reward)/len(avg_reward),2)*100}** **percent reward** with the **predicted actions of Sell/Buy** and the average profit of **{round(sum(avg_profit)/len(avg_profit),2)*100}** percent.')
+            st.markdown(f'Our model has earned **{round(sum(avg_reward)/len(avg_reward),2)}** **percent reward** with the **predicted actions of Sell/Buy** and the average profit of **{round(sum(avg_profit)/len(avg_profit),2)}** percent.')
             st.markdown(f'Actions taken : **Buying -- {No_Buy}** ; **Selling -- {No_Sell}**')
+            st.markown(f' Maximum profit achieved While taking action once: **{max_profit}**')
 except ValueError:
     st.error('Please select the ticker option!',icon='❌')
-# # # 2. Build Environment
-
-# # # 2.1 Add Custom Indicators
-
-# # ## 2.1.3. Calculate SMA, RSI and OBV
-
-# # ## 2.1.4. Create New Environments
 
 
 
-    
-# # # 3. Build Environment and Train
 
-
-# # # 4. Evaluation
-
-
-   
-
-# profit_color = [{p<0: 'red', 0<=p<=1: 'orange'}[True] for p in df.monthly_returns().T['2019']]
-# plt.figure(figsize=(12,6))
-# plt.bar(x=df1.index,height=df1['2019'],color=profit_color)
 
 
 
