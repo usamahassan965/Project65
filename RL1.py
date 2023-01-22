@@ -194,6 +194,7 @@ try:
             st.markdown(f'Our model has earned **{round(sum(avg_reward)/len(avg_reward),2)}** **percent reward** with the **predicted actions of Sell/Buy** and the average profit of **{round(sum(avg_profit)/len(avg_profit),2)}** percent.')
             st.markdown(f'Actions taken : **Buying -- {No_Buy}** ; **Selling -- {No_Sell}**')
             st.markdown(f' Maximum profit achieved While taking action once: **{max_profit}**')
+            st.text('**Note:** If the average reward is positive and less than 100%, it means the agent has been penalized for making loss in selling actions(average profit < 100%). If the average reward is negative and less than 100%, it means our model has taken buying actions and bought the stocks with the reduced profit. Hence, the best decision taken!') 
 except ValueError:
     st.error('Please select the ticker option!',icon='❌')
 
