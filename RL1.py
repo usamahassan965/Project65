@@ -177,7 +177,7 @@ try:
             plt.ylabel('Short Selling (Red) Vs Long Buying (Green)')
             ax.set_facecolor('#1CC4AF')
             st.pyplot(fig)
-            st.subheader('Plot_Daily_Returns')
+            st.subheader('Daily Return Plot')
             fig1 = go.Figure()
             fig1.add_trace(go.Scatter(x=d.index,y=d.Returns,mode='markers+lines',name='Returns'))
             fig1.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='blue')
