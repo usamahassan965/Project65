@@ -22,6 +22,8 @@ import seaborn as sns
 import pandas as pd
 import quantstats as qs
 from matplotlib import pyplot as plt
+import plotly.graph_objects as go
+from plotly.graph_objects import Layout
 import yfinance as yf
 import string
 import warnings
@@ -110,22 +112,20 @@ class MyCustomEnv(StocksEnv):
 
 # Plot raw data
 def plot_raw_data():
-    fig = plt.figure(figsize=(12,6),dpi=100,facecolor='cyan')
-    plt.plot(df.Date,df.Close,label='Close',color='m',marker='o')
-    plt.plot(df.Date,df.Open,label='Open',color='r',marker='+')
-    plt.xlabel('Date')
-    plt.ylabel('Stock Price')
-    plt.legend()
-    st.pyplot(fig)
-    
-def plot_raw_data2():
-    fig = plt.figure(figsize=(12,6),dpi=100,facecolor='cyan')
-    plt.plot(df.Date,df.High,label='High',color='y',marker='o')
-    plt.plot(df.Date,df.Low,label='Low',color='g',marker='+')
-    plt.xlabel('Date')
-    plt.ylabel('Stock Price')
-    plt.legend()
-    st.pyplot(fig)
+    layout = Layout(plot_bgcolor='rgba(230,240,245,0)')
+    fig = go.Figure(layout=layout)
+    fig.add_trace(go.Candlestick(
+        x=df['Date'],
+        open=df['Open'],
+        high=df['High'],
+        low=df['Low'],
+        close=df['Close'],increasing_line_color= 'blue', decreasing_line_color= 'gray'
+    ))
+    fig.update_layout(
+        xaxis_rangeslider_visible=True)
+    fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='blue')
+    st.write(fig)
+
 try:
     if Load_check:
         df = load_data(ticker,Start,End)
@@ -135,10 +135,9 @@ try:
         df.fillna(0, inplace=True)
         st.subheader('Raw Data')
         st.write(df.head())
-        st.header('Opening and Closing Price')
-        plot_raw_data()        
-        st.header('High and Low Price')
-        plot_raw_data2()
+        st.header('OHLC Graph')
+        plot_raw_data()
+        
         months_train = st.sidebar.slider('Months to train...',min_value=1,max_value=12,value=2,step=1)          # # # 3. Build Environment and Train
 
         with st.spinner('Please wait while the model is training  for prediction...'):
@@ -164,9 +163,10 @@ try:
             qs.extend_pandas()
             net_worth = pd.Series(env.history['total_profit'], index=df.index[start_index+1:end_index])
             returns = net_worth.pct_change().iloc[1:]
-            start = df.index[start_index+2:end_index]
-            result = np.vstack((start,returns)).T
-            result = pd.DataFrame(result,columns=['Date','Returns']) 
+            start = pd.to_datetime(Start)+datetime.timedelta(days=train-18)
+            datelist = pd.date_range(start, periods=end_index-start_index-2)
+            d = pd.DataFrame(returns,columns=['Returns'])
+            d.index = datelist
             st.subheader('Prediction Graph')
             fig,ax = plt.subplots(figsize=(15,6),facecolor='yellow')
             plt.cla()
@@ -178,12 +178,10 @@ try:
             ax.set_facecolor('#1CC4AF')
             st.pyplot(fig)
             st.subheader('Plot_Daily_Returns')
-            fig = plt.figure(figsize=(12,6),dpi=100,facecolor='cyan')
-            plt.plot(result.Date,result.Returns,label='Daily Return',color='y',marker='o')
-            plt.xlabel('Days')
-            plt.ylabel('Stock Price')
-            plt.legend()
-            st.pyplot(fig)  
+            fig1 = go.Figure()
+            fig1.add_trace(go.Scatter(x=d.index,y=d.Returns,mode='markers+lines',name='Returns'))
+            fig1.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='blue')
+            st.write(fig1)
 
             st.subheader('Metrics')
             avg_reward = env.history['total_reward']
