@@ -121,10 +121,13 @@ def plot_raw_data():
         low=df['Low'],
         close=df['Close'],increasing_line_color= 'blue', decreasing_line_color= 'gray'
     ))
-    fig.update_layout(
-        xaxis_rangeslider_visible=True)
+
+    fig.update_layout(xaxis_rangeslider_visible=True)
     fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='blue')
-    st.write(fig)
+    st.plotly_chart(fig, config= {'displaylogo': False})
+    st.subheader('Volume Graph')
+    fig1 = go.Figure(go.Scatter(x=df['Date'],y=df['Volume'],mode='markers+lines',name='Volume'))
+    st.plotly_chart(fig1, config= {'displaylogo': False})
 
 try:
     if Load_check:
