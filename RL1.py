@@ -148,11 +148,7 @@ def plot_raw_data():
     
     fig['data'].append( dict( x=df.Date, y=df.Volume,                         
                          marker=dict( color=colors ),
-                         type='bar', yaxis='y', name='Volume' ) )
-    fig.update_layout(
-    autosize=False,
-    width=800,
-    height=800)
+                         type='bar', yaxis='y', name='Volume' ))
     
     st.plotly_chart(fig, config= {'displaylogo': False})
 
