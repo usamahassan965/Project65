@@ -149,6 +149,10 @@ def plot_raw_data():
     fig['data'].append( dict( x=df.Date, y=df.Volume,                         
                          marker=dict( color=colors ),
                          type='bar', yaxis='y', name='Volume' ) )
+    fig.update_layout(
+    autosize=False,
+    width=800,
+    height=800)
     
     st.plotly_chart(fig, config= {'displaylogo': False})
 
@@ -161,7 +165,7 @@ try:
         df.fillna(0, inplace=True)
         st.subheader('Raw Data')
         st.write(df.head())
-        st.header('OHLC Graph')
+        st.header('OHLCV Graph')
         plot_raw_data()
         
         months_train = st.sidebar.slider('Months to train...',min_value=1,max_value=12,value=2,step=1)          # # # 3. Build Environment and Train
