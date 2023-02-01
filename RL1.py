@@ -112,21 +112,44 @@ class MyCustomEnv(StocksEnv):
 
 # Plot raw data
 def plot_raw_data():
-    layout = Layout(plot_bgcolor='rgba(230,240,245,0)')
-    fig = go.Figure(layout=layout)
-    fig.add_trace(go.Candlestick(
-        x=df['Date'],
-        open=df['Open'],
-        high=df['High'],
-        low=df['Low'],
-        close=df['Close'],increasing_line_color= 'blue', decreasing_line_color= 'gray'
-    ))
+    INCREASING_COLOR = '#17BECF'
+    DECREASING_COLOR = '#7F7F7F'
+    colors = []
 
-    fig.update_layout(xaxis_rangeslider_visible=True)
-    fig.update_xaxes(showline=True, linewidth=2, linecolor='black', gridcolor='blue')
-    st.plotly_chart(fig, config= {'displaylogo': False})
-    st.subheader('Volume Graph')
-    fig1 = go.Figure(go.Scatter(x=df['Date'],y=df['Volume'],mode='markers+lines',name='Volume'))
+    for i in range(len(df.Close)):
+        if i != 0:
+            if df.Close[i] > df.Close[i-1]:
+                colors.append(INCREASING_COLOR)
+            else:
+                colors.append(DECREASING_COLOR)
+        else:
+            colors.append(DECREASING_COLOR)
+    data = [ dict(
+    type = 'candlestick',
+    open = df.Open,
+    high = df.High,
+    low = df.Low,
+    close = df.Close,
+    x = df.Date,
+    yaxis = 'y2',
+    name = 'OHLC',increasing = dict( line = dict( color = INCREASING_COLOR ) ),
+    decreasing = dict( line = dict( color = DECREASING_COLOR ) )) ]
+
+    layout=dict()
+
+    fig = dict( data=data, layout=layout )
+    fig['layout'] = dict()
+    fig['layout']['plot_bgcolor'] = 'rgb(250, 250, 250)'
+    fig['layout']['xaxis'] = dict( rangeselector = dict( visible = True ) )
+    fig['layout']['yaxis'] = dict( domain = [0, 0.2], showticklabels = False )
+    fig['layout']['yaxis2'] = dict( domain = [0.2, 0.8] )
+    fig['layout']['legend'] = dict( orientation = 'h', y=0.9, x=0.3, yanchor='bottom' )
+    fig['layout']['margin'] = dict( t=40, b=40, r=40, l=40 )
+    
+    fig['data'].append( dict( x=df.Date, y=df.Volume,                         
+                         marker=dict( color=colors ),
+                         type='bar', yaxis='y', name='Volume' ) )
+    
     st.plotly_chart(fig1, config= {'displaylogo': False})
 
 try:
