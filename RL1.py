@@ -150,7 +150,7 @@ def plot_raw_data():
                          marker=dict( color=colors ),
                          type='bar', yaxis='y', name='Volume' ) )
     
-    st.plotly_chart(fig1, config= {'displaylogo': False})
+    st.plotly_chart(fig, config= {'displaylogo': False})
 
 try:
     if Load_check:
